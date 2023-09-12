@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dev Utils - API test</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../public/stylesheets/style.css" />
+  </head>
+  <body>
+    <div style="max-width: 100dvw; padding: 20px">
+      <div class="row">
+        <div class="col-6">
+          <div class="card">
+            <div class="card-header">
+              <h2>Request</h2>
+            </div>
+            <form id="form">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="base-url">BaseURL</label>
+                  <select
+                    class="form-control"
+                    id="base-url"
+                    type="text"
+                    value="http://115.68.230.12:8000/"
+                  >
+                    <option value="http://115.68.230.12:8000/">개발서버</option>
+                    <option value="http://api.rootall.org/">본서버</option>
+                    <option value="">선택안함</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="url">URL</label>
+                  <input
+                    class="form-control"
+                    id="url"
+                    type="text"
+                    value="training/coach/"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="method">Request method</label>
+                  <select id="method" class="form-control">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="PATCH">PATCH</option>
+                    <option value="DELETE">DELETE</option>
+                  </select>
+                </div>
+
+                <div class="form-group" id="query-group">
+                  <label for="query">Query string</label>
+                  <input
+                    class="form-control"
+                    id="query"
+                    value="?user_email=dev.man@hints.or.kr"
+                    placeholder="?key1=val1&key2=val2"
+                  />
+                </div>
+
+                <div class="form-group" id="body-group" style="display: none">
+                  <label for="body">Body</label>
+                  <div
+                    id="body"
+                    class="form-control p-0 overflow-hidden"
+                    style="height: 150px"
+                  ></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  <span id="label">Send</span>
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    style="display: none"
+                  ></span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div id="response-area" class="card h-100">
+            <div class="card-header">
+              <h2>Response</h2>
+            </div>
+            <div class="card-body">
+              <div
+                id="response"
+                class="form-control p-0 h-100 overflow-hidden"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.16.2/min/vs/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script>
+      const baseUrlElem = $('#base-url')
+      const urlElem = $('#url')
+      const methodElem = $('#method')
+      const queryArea = $('#query-group')
+      const queryElem = $('#query')
+      const bodyArea = $('#body-group')
+      let bodyElem
+      let responseElem
+      require.config({
+        paths: {
+          vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.16.2/min/vs'
+        }
+      })
+      require(['vs/editor/editor.main'], () => {
+        bodyElem = monaco.editor.create(document.getElementById('body'), {
+          theme: 'vs-light',
+          fontFamily: 'D2Coding ligature',
+          fontSize: '14px',
+          automaticLayout: true,
+          scrollBeyondLastLine: false,
+          language: 'json',
+          minimap: { enabled: false },
+          overviewRulerLanes: 0,
+          value: `{\n\t\n}`
+        })
+
+        bodyElem.onKeyDown(e => {
+          if (e.shiftKey && e.code === 'Enter') {
+            e.preventDefault()
+            e.stopPropagation()
+            e.Handled = true
+            $('form').trigger('submit')
+          }
+        })
+
+        responseElem = monaco.editor.create(
+          document.getElementById('response'),
+          {
+            theme: 'vs-light',
+            fontFamily: 'D2Coding ligature',
+            fontSize: '14px',
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+            language: 'json',
+            readOnly: true,
+            minimap: { enabled: false },
+            overviewRulerLanes: 0,
+            value: ''
+          }
+        )
+      })
+
+      $(window).keydown(e => {
+        if (e.ctrlKey || e.metaKey) {
+          switch (e.key) {
+            case '1':
+              e.preventDefault()
+              methodElem.val('GET')
+              break
+            case '2':
+              e.preventDefault()
+              methodElem.val('POST')
+              break
+            case '3':
+              e.preventDefault()
+              methodElem.val('PUT')
+              break
+            case '4':
+              e.preventDefault()
+              methodElem.val('PATCH')
+              break
+            case '5':
+              e.preventDefault()
+              methodElem.val('DELETE')
+              break
+          }
+          methodElem.trigger('change')
+        }
+      })
+
+      urlElem.blur(() => {
+        if (urlElem.val().slice(-1) !== '/') urlElem.val(urlElem.val() + '/')
+      })
+
+      methodElem.change(e => {
+        switch (methodElem.val()) {
+          case 'GET':
+            bodyArea.hide()
+            break
+          case 'POST':
+          case 'PUT':
+          case 'PATCH':
+          case 'DELETE':
+            bodyArea.show()
+            break
+        }
+      })
+
+      $('#form').submit(e => {
+        e.preventDefault()
+
+        const spinner = $('span.spinner-border')
+        const label = $('span#label')
+        label.hide()
+        spinner.show()
+
+        let url = baseUrlElem.val() + urlElem.val() + queryElem.val()
+        const method = methodElem.val()
+        let body
+        if (method !== 'GET') {
+          try {
+            body = JSON.parse(bodyElem.getValue())
+          } catch (error) {
+            spinner.hide()
+            label.show()
+            return
+          }
+        }
+
+        $.ajax({
+          url: url,
+          method: method,
+          data: body
+        })
+          .done(response => {
+            let res = response
+            if (typeof res != 'object') res = JSON.parse(response)
+            responseElem.setValue(JSON.stringify(res, null, 4))
+          })
+          .fail(response =>
+            responseElem.setValue(
+              `${response.status}: ${response.statusText}\n${response.responseText}`
+            )
+          )
+          .always(() => {
+            spinner.hide()
+            label.show()
+          })
+      })
+    </script>
+  </body>
+</html>
