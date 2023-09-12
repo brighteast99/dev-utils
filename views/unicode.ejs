@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dev Utils - Unicode</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div style="max-width: 100dvw; padding: 20px">
+      <div class="row">
+        <div class="col-6">
+          <div class="card">
+            <div class="card-header">
+              <h2>Unicode</h2>
+            </div>
+            <form id="form">
+              <div class="card-body p-0">
+                <textarea
+                  id="unicode"
+                  class="form-control overflow-y-auto border-0 rounded-top-0"
+                  style="resize: none"
+                  rows="15"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div id="response-area" class="card h-100">
+            <div class="card-header">
+              <h2>Text</h2>
+            </div>
+            <div class="card-body p-0">
+              <textarea
+                id="text"
+                class="form-control overflow-y-auto rounded-top-0 border-0"
+                style="resize: none"
+                rows="15"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script>
+      const unicodeBox = $('#unicode')
+      const textBox = $('#text')
+
+      unicodeBox.blur(decode)
+
+      function decode() {
+        const input = unicodeBox.val()
+        textBox.val(
+          input.replace(/\\u([a-fA-F0-9]{4})/g, (match, grp) =>
+            String.fromCharCode(parseInt(grp, 16))
+          )
+        )
+      }
+    </script>
+  </body>
+</html>
