@@ -8,7 +8,6 @@
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="../public/stylesheets/style.css" />
   </head>
   <body>
     <div style="max-width: 100dvw; padding: 20px">
@@ -20,8 +19,8 @@
             </div>
             <form id="form">
               <div class="card-body">
-                <div class="form-group">
-                  <label for="base-url">BaseURL</label>
+                <div class="mb-3">
+                  <label for="base-url" class="form-label">BaseURL</label>
                   <select
                     class="form-control"
                     id="base-url"
@@ -33,8 +32,9 @@
                     <option value="">선택안함</option>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label for="url">URL</label>
+
+                <div class="mb-3">
+                  <label for="url" class="form-label">URL</label>
                   <input
                     class="form-control"
                     id="url"
@@ -43,8 +43,8 @@
                   />
                 </div>
 
-                <div class="form-group">
-                  <label for="method">Request method</label>
+                <div class="mb-3">
+                  <label for="method" class="form-label">Request method</label>
                   <select id="method" class="form-control">
                     <option value="GET">GET</option>
                     <option value="POST">POST</option>
@@ -54,8 +54,8 @@
                   </select>
                 </div>
 
-                <div class="form-group" id="query-group">
-                  <label for="query">Query string</label>
+                <div class="mb-3" id="query-group">
+                  <label for="query" class="form-label">Query string</label>
                   <input
                     class="form-control"
                     id="query"
@@ -64,21 +64,24 @@
                   />
                 </div>
 
-                <div class="form-group" id="body-group" style="display: none">
-                  <label for="body">Body</label>
+                <div class="mb-3" id="body-group" style="display: none">
+                  <label for="body" class="form-label">Body</label>
                   <div
                     id="body"
                     class="form-control p-0 overflow-hidden"
                     style="height: 150px"
                   ></div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                  <span id="label">Send</span>
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    style="display: none"
-                  ></span>
-                </button>
+
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">
+                    <span id="label">Send</span>
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      style="display: none"
+                    ></span>
+                  </button>
+                </div>
               </div>
             </form>
           </div>
